@@ -46,30 +46,30 @@
 		'use strict';
 		let DRAYTIME = 5;
 		const FPS = 16;
-		const video = document.getElementById("video");
-		const canvas = document.querySelector("#canvas");
-		const view1 = document.querySelector("#view1");
-		const cameraOptions = document.querySelector('#cameraSelect');
-		const context2d = canvas.getContext("2d");
+		const VIDEO = document.getElementById("video");
+		const CANVAS = document.querySelector("#canvas");
+		const VIEW1 = document.querySelector("#view1");
+		const CAMERA_OPRIONS = document.querySelector('#cameraSelect');
+		const CONTEXT2D = CANVAS.getContext("2d");
 		let count = 0;
 		let intervalID = null;
 		//スマホ対策
-		video.setAttribute('autoplay', '');
-		video.setAttribute('muted', '');
-		video.setAttribute('playsinline', '');
+		VIDEO.setAttribute('autoplay', '');
+		VIDEO.setAttribute('muted', '');
+		VIDEO.setAttribute('playsinline', '');
 		const drowView = () => {
 			const Mem = Array(2 ** Math.round(Math.log2(DRAYTIME * FPS)));
 			if (intervalID !== null) {
 				clearInterval(intervalID);
 			}
 			intervalID = setInterval(() => {
-				view1.width = canvas.width = video.clientWidth;
-				view1.height = canvas.height = video.clientHeight;
-				const vcRatio = canvas.clientWidth / video.clientWidth;
-				context2d.drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
-				Mem[count & (Mem.length - 1)] = context2d.getImageData(0, 0, video.clientWidth, video.clientHeight);
+				VIEW1.width = CANVAS.width = VIDEO.clientWidth;
+				VIEW1.height = CANVAS.height = VIDEO.clientHeight;
+				const vcRatio = CANVAS.clientWidth / VIDEO.clientWidth;
+				CONTEXT2D.drawImage(video, 0, 0, VIDEO.clientWidth, VIDEO.clientHeight);
+				Mem[count & (Mem.length - 1)] = CONTEXT2D.getImageData(0, 0, VIDEO.clientWidth, VIDEO.clientHeight);
 				if (Mem[(count + 1) & (Mem.length - 1)] != undefined) {
-					view1.getContext('2d').putImageData(Mem[(count + 1) & (Mem.length - 1)], 0, 0);
+					VIEW1.getContext('2d').putImageData(Mem[(count + 1) & (Mem.length - 1)], 0, 0);
 				}
 				if (count >= Mem.length) {
 					count = 0;
@@ -84,8 +84,8 @@
 		};
 		const start = async (args) => {
 			await navigator.mediaDevices.getUserMedia(args).then(stream => {
-				video.srcObject = stream;
-				video.play();
+				VIDEO.srcObject = stream;
+				VIDEO.play();
 				drowView();
 				init();
 			}).catch(e => {
@@ -104,13 +104,13 @@
 				});
 
 				if (videoDevices.length > 1 && videoDevices.every(d => d.deviceId != '')) {
-					cameraOptions.innerHTML = "";
+					CAMERA_OPRIONS.innerHTML = "";
 					for (let i = 0; i < videoDevices.length; i++) {
 						const videoDevice = videoDevices[i];
 						const option = document.createElement('option');
 						option.value = videoDevice.deviceId;
 						option.text = videoDevice.label || `camera:${i + 1}`
-						cameraOptions.appendChild(option);
+						CAMERA_OPRIONS.appendChild(option);
 					}
 
 				}
