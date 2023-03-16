@@ -17,6 +17,13 @@
 			visibility: hidden;
 			opacity: 0;
 		}
+
+		.hiddenWrapper {
+			visibility: hidden;
+			overflow: hidden;
+			height: 0;
+			width: 0;
+		}
 	</style>
 	<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 </head>
@@ -31,12 +38,9 @@
 			</select>
 		</p>
 		<canvas id="view1"></canvas>
-		<div>
+		<div class="hiddenWrapper">
 			<video id="video"></video>
-		</div>
-		<div>
 			<canvas id="canvas" style="display: block;"></canvas>
-
 		</div>
 	</div>
 	<script>
@@ -50,7 +54,7 @@
 		const context2d = canvas.getContext("2d");
 		let count = 0;
 		let intervalID = null;
-
+		//スマホ対策
 		video.setAttribute('autoplay', '');
 		video.setAttribute('muted', '');
 		video.setAttribute('playsinline', '');
@@ -115,6 +119,7 @@
 			}
 		};
 		init().then(() => start(MediaArgs))
+		//イベント
 		document.getElementById("delay").oninput = (e) => {
 			DRAYTIME = e.target.value;
 			drowView();
